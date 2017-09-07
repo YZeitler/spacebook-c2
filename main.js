@@ -1,20 +1,19 @@
 var SpacebookApp = function() {
+    var postTempSource = $('#post-template').html();
+    var postTemplate = Handlebars.compile(postTempSource);
 
-    var postsArray = [];
+    var posts = [];
+
     var id = 0;
     var toggle = false;
 
     function renderView() {
         $('.posts').empty();
-
-        for (i = 0; i < postsArray.length; i++) {
-            var currentPost = '<div class="post" data-id="' + postsArray[i].id + '">' + '<button type="button" class="remove btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Post </button> ' + postsArray[i].text + ' <button class="linkPost btn-success"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Show Post</button><br><input type="username" id="my-username" class="my-username" placeholder="Username"> <input type="text" id="my-comment" class="my-comment" placeholder="Comments..."> <button type="button" class="addComment"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post Comment </button > <div class="comments">';
-
-            for (j = 0; j < postsArray[i].comments.length; j++) {
-                currentPost += '<div class="comment">' + postsArray[i].comments[j].user + ': ' + postsArray[i].comments[j].text + '<button type="button" class="removeComment btn-warning"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove Comment </button ></div>'
-            }
-            $('.posts').append(currentPost + '</div></div>')
+        for (var i = 0; i < posts.length; i++) {
+            var HTML = postTemplate(posts[i]);
+            $('.posts').append(HTML);
         }
+
     }
     //Add a post to array
     function addPost(postVal) {
@@ -24,7 +23,7 @@ var SpacebookApp = function() {
             comments: []
         }
         id += 1;
-        postsArray.push(post);
+        posts.push(post);
         renderView();
     }
 
@@ -35,18 +34,18 @@ var SpacebookApp = function() {
                 text: commentText
             };
             //TODO: find relevant post in postsArray array, push comment to it's comments array
-            postsArray[pIndex].comments.push(newComment);
+            posts[pIndex].comments.push(newComment);
             renderView()
         }
     }
 
     function removePost(pID) {
-        postsArray.splice(pID, 1);
+        posts.splice(pID, 1);
         renderView();
     }
 
     function removeComment(cIndex, commentIndex) {
-        postsArray[cIndex].comments.splice(commentIndex, 1);
+        posts[cIndex].comments.splice(commentIndex, 1);
         renderView();
     }
 

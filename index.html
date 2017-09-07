@@ -14,22 +14,83 @@
                 <h1>Spacebook</h1>
             </div>
 
-            <div class="posts">
-            </div>
-
-            <form>
-                <h3>Add a New Post</h3>
-
-                <div class="form-group">
-                    <input type="text" id="post-name" class="form-control" placeholder="Post Text">
-                </div>
-
-                <button id="post-button" class="btn btn-primary add-post" type="button">Post</button>
-            </form>
+            <div class="posts"> </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-    <script src="main.js"></script>
+    <form>
+        <h3>Add a New Post</h3>
+
+        <div class="form-group">
+            <input type="text" id="post-name" class="form-control" placeholder="Post Text">
+        </div>
+
+        <button id="post-button" class="btn btn-primary add-post" type="button">Post</button>
+    </form>
+
+
+    <!-- <script id="store-template" type="text/x-handlebars-template">
+        {{#each postsArray}}
+        <div class="post" data-id="{{ id }}">
+            <button type="button" class="remove btn-danger"> 
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Post</button> {{ text }}
+            <button class="linkPost btn-success">
+            <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Hide/Show Other Posts</button> <br>
+            <input type="username" id="my-username" class="my-username" placeholder="Username"> <input type="text" id="my-comment" class="my-comment" placeholder="Comments..."> <button type="button " class="addComment">
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post Comment </button>
+        </div>
+        <div class="comments"> </div>
+        {{/each}}
+    </script>
+
+    <script id="more-template" type="text/x-handlebars-template">
+        {{#each comments}}
+
+        <div class="comment"> {{ user }}: {{ text }}
+            <button type="button" class="removeComment btn-warning"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove Comment
+                                    </button>
+        </div>
+        {{/each}}
+    </script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script id="post-template" type="text/x-handlebars-template">
+
+        <div class="post" data-id="{{ id }}">
+            <button type="button" class="remove btn-danger"> 
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Post</button> {{ text }}
+            <button class="linkPost btn-success">
+            <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Hide/Show Other Posts</button> <br>
+            <input type="username" id="my-username" class="my-username" placeholder="Username"> <input type="text" id="my-comment" class="my-comment" placeholder="Comments..."> <button type="button " class="addComment">
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post Comment </button>
+            <div class="comments">
+
+                {{#each comments}}
+                <div class="comment">
+                    {{ user }}: {{ text }}
+                    <button type="button" class="removeComment btn-warning"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove Comment </button >
+                </div>
+                {{/each}}
+
+            </div>
+        </div>
+    </script>
+
+
+    <script src="node_modules/handlebars/dist/handlebars.js "></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js "></script>
+    <script src="main.js "></script>
 </body>
 
 </html>
