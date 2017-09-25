@@ -44,11 +44,12 @@ app.delete('/post/:id', function(req, res) {
 app.post('/post/:id/comments', function(req, res) {
     var id = req.params.id;
     Post.findById(id, function(err, post) {
-        if (err) { return console.log("Error delete"); } else {
-            post.comments.push(req.body)
-            post.save();
-            res.send(post);
-        }
+        if (err) { return console.log("Error delete") }
+        post.comments.push(req.body)
+        post.save();
+        console.log(post)
+        res.send(post);
+
 
     });
 });

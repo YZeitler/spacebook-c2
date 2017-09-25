@@ -23,7 +23,7 @@ var SpacebookApp = function() {
 
 
     function _renderPosts() {
-        console.log("rendering")
+        console.log("renderPosts")
         $posts.empty();
         var source = $('#post-template').html();
         var template = Handlebars.compile(source);
@@ -86,14 +86,18 @@ var SpacebookApp = function() {
 
     };
 
-    var addComment = function(newComment, postIndex, id) {
+    var addComment = function(newComment, postIndex) {
+        var id = posts[postIndex]._id //  THE ID of the current post that was clicked on.
 
         $.ajax({
             method: "POST",
             url: '/post/' + id + '/comments',
             data: newComment,
-            success: function(data) {
-                posts.push(data);
+            success: function(savedComment) {
+                console.log("hey")
+                console.log(data);
+
+                posts[postIndex].comments.push(savedComment);
                 _renderPosts();
 
             },
@@ -161,11 +165,11 @@ $posts.on('click', '.add-comment', function() {
         return;
     }
 
-    var id = $(this).closest('.post').data()._id;
+
     var postIndex = $(this).closest('.post').index();
     var newComment = { text: $comment.val(), user: $user.val() };
 
-    app.addComment(newComment, postIndex, id);
+    app.addComment(newComment, postIndex);
 
     $comment.val("");
     $user.val("");
