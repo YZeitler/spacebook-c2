@@ -2,25 +2,52 @@ var SpacebookApp = function() {
 
     var posts = [];
 
+
+    function _fetchData() {
+        $.ajax({
+            method: "GET",
+            url: '/post',
+            success: function(data) {
+                posts = (data);
+                _renderPosts();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    }
+
+
     var $posts = $(".posts");
 
-    _renderPosts();
+
 
     function _renderPosts() {
+        console.log("rendering")
         $posts.empty();
         var source = $('#post-template').html();
         var template = Handlebars.compile(source);
         for (var i = 0; i < posts.length; i++) {
             var newHTML = template(posts[i]);
-            console.log(newHTML);
+
             $posts.append(newHTML);
             _renderComments(i)
         }
     }
 
-    function addPost(newPost) {
-        posts.push({ text: newPost, comments: [] });
-        _renderPosts();
+    function addPost(postData) {
+        $.ajax({
+            method: "POST",
+            url: '/post/',
+            data: postData,
+            success: function(data) {
+                posts.push(data);
+                _renderPosts();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
     }
 
 
@@ -36,14 +63,46 @@ var SpacebookApp = function() {
         }
     }
 
-    var removePost = function(index) {
-        posts.splice(index, 1);
-        _renderPosts();
+    var removePost = function(id) {
+
+        $.ajax({
+            method: "DELETE",
+            url: '/post/' + id,
+            success: function(data) {
+                // var index = 
+                console.log(data);
+                var id = data._id;
+                for (i = 0; i < posts.length; i++) {
+                    if (id === posts[i]._id) {
+                        posts.splice(i, 1);
+                        _renderPosts();
+                    }
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+
     };
 
-    var addComment = function(newComment, postIndex) {
-        posts[postIndex].comments.push(newComment);
-        _renderComments(postIndex);
+    var addComment = function(newComment, postIndex, id) {
+
+        $.ajax({
+            method: "POST",
+            url: '/post/' + id + '/comments',
+            data: newComment,
+            success: function(data) {
+                posts.push(data);
+                _renderPosts();
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+
+
     };
 
 
@@ -51,6 +110,8 @@ var SpacebookApp = function() {
         posts[postIndex].comments.splice(commentIndex, 1);
         _renderComments(postIndex);
     };
+
+    _fetchData();
 
     return {
         addPost: addPost,
@@ -68,7 +129,11 @@ $('#addpost').on('click', function() {
     if ($input.val() === "") {
         alert("Please enter text!");
     } else {
-        app.addPost($input.val());
+        var postData = {
+            text: $input.val(),
+            comments: []
+        }
+        app.addPost(postData);
         $input.val("");
     }
 });
@@ -76,8 +141,9 @@ $('#addpost').on('click', function() {
 var $posts = $(".posts");
 
 $posts.on('click', '.remove-post', function() {
-    var index = $(this).closest('.post').index();;
-    app.removePost(index);
+    // var index = $(this).closest('.post').index();
+    var id = $(this).closest('.post').data().id;
+    app.removePost(id);
 });
 
 $posts.on('click', '.toggle-comments', function() {
@@ -95,10 +161,11 @@ $posts.on('click', '.add-comment', function() {
         return;
     }
 
+    var id = $(this).closest('.post').data()._id;
     var postIndex = $(this).closest('.post').index();
     var newComment = { text: $comment.val(), user: $user.val() };
 
-    app.addComment(newComment, postIndex);
+    app.addComment(newComment, postIndex, id);
 
     $comment.val("");
     $user.val("");

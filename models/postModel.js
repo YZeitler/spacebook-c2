@@ -12,8 +12,6 @@ var commentSchema = new Schema({
     user: String
 });
 
-var Comment = mongoose.model("comment", commentSchema);
-
 
 var postSchema = new Schema({
     text: String,
@@ -22,4 +20,6 @@ var postSchema = new Schema({
 
 var Post = mongoose.model('post', postSchema)
 
-module.exports = Post
+
+
+module.exports = Post;
