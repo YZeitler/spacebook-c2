@@ -60,6 +60,7 @@ var SpacebookApp = function() {
         for (var i = 0; i < posts[postIndex].comments.length; i++) {
             var newHTML = template(posts[postIndex].comments[i]);
             $commentsList.append(newHTML);
+            console.log(newHTML)
         }
     }
 
@@ -93,11 +94,10 @@ var SpacebookApp = function() {
             method: "POST",
             url: '/post/' + id + '/comments',
             data: newComment,
-            success: function(savedComment) {
-                console.log("hey")
-                console.log(data);
-
-                posts[postIndex].comments.push(savedComment);
+            success: function(savedPost) {
+                console.log(savedPost)
+                    // posts[postIndex].comments.push(savedComment);
+                posts[postIndex] = savedPost;
                 _renderPosts();
 
             },
